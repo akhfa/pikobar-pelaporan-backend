@@ -11,6 +11,7 @@ const DistrictCity = mongoose.model('Districtcity')
 
 const ObjectId = require('mongoose').Types.ObjectId
 const Check = require('../helpers/rolecheck')
+const filters = require('../helpers/searchfilter')
 
 function ListCase (query, user, callback) {
 
@@ -23,7 +24,7 @@ function ListCase (query, user, callback) {
   };
 
   const sorts = (query.sort == "desc" ? {createdAt:"desc"} : JSON.parse(query.sort))
-
+  const params = filters.caseFilter(query)
   const options = {
     page: query.page,
     limit: query.limit,
@@ -33,32 +34,9 @@ function ListCase (query, user, callback) {
     customLabels: myCustomLabels
   };
 
-  var params = new Object();
-
-  if(query.address_district_code){
-    params.address_district_code = query.address_district_code;
-  }
-  if(query.address_village_code){
-    params.address_village_code = query.address_village_code;
-  }
-  if(query.address_subdistrict_code){
-    params.address_subdistrict_code = query.address_subdistrict_code;
-  }
-  if(query.start_date && query.end_date){
-    params.createdAt = {
-      "$gte": new Date(new Date(query.start_date)).setHours(00, 00, 00),
-      "$lt": new Date(new Date(query.end_date)).setHours(23, 59, 59)
-    }
-  }
   if(user.role == 'dinkeskota'){
     params.author = new ObjectId(user._id);
     params.author_district_code = user.code_district_city;
-  }
-  if(query.status){
-    params.status = query.status;
-  }
-  if(query.final_result){
-    params.final_result = query.final_result;
   }
   if(query.search){
     var search_params = [
@@ -80,32 +58,10 @@ function ListCase (query, user, callback) {
 }
 
 function listCaseExport (query, user, callback) {
-  const params = {}
-  
-  if(query.start_date && query.end_date){
-    params.createdAt = {
-      "$gte": new Date(new Date(query.start_date)).setHours(00, 00, 00),
-      "$lt": new Date(new Date(query.end_date)).setHours(23, 59, 59)
-    }
-  }
+  const params = filters.caseFilter(query)
   
   Check.exportByRole(params,user,query)
-
-  if(query.status){
-    params.status = query.status;
-  }
-  if(query.final_result){
-    params.final_result = query.final_result;
-  }
-  if(query.address_district_code){
-    params.address_district_code = query.address_district_code;
-  }
-  if(query.address_village_code){
-    params.address_village_code = query.address_village_code;
-  }
-  if(query.address_subdistrict_code){
-    params.address_subdistrict_code = query.address_subdistrict_code;
-  }
+  
   if(query.search){
     var search_params = [
       { id_case : new RegExp(query.search,"i") },
@@ -159,15 +115,10 @@ function getCaseSummary (query, user, callback) {
   let searching = Check.countByRole(user,query)
   var aggStatus = [
     { $match: { 
-      $and: [  
-            searching,
-            { delete_status: { $ne: 'deleted' }}
-          ]
-    }},
-    {$group: {
-      _id: "$status",
-      total: {$sum: 1}
-    }}
+      $and: [  searching, { delete_status: { $ne: 'deleted' }} ]
+      }
+    },
+    { $group: { _id: "$status", total: {$sum: 1} }}
   ];
 
   let result =  {
@@ -262,23 +213,6 @@ function updateCase (id, author, payload, callback) {
 }
 
 function getCountCaseByDistrict(callback) {
-  /*
-  var summary = {};
-  DistrictCity.find().then(district_city => {
-    Case.find({ address_district_code: district_city.kemendagri_kabupaten_kode }).then( res => {
-      summary[district_city.name] = res.length();
-    })
-    .catch(err => callback(err, null));
-  })
-  .catch(err => callback(err, null));
-
-  return callback(null, summary);
-
-  var res = DistrictCity.collection.aggregate([
-    {"$group": { _id: "$address_district_code", count: {$sum:1}}}
-  ])
-  return callback(null, res.toArray());
-  */
   var aggStatus = [
     { $match: { delete_status: { $ne: 'deleted' }} },
     {$group: {
