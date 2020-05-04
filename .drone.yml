@@ -7,12 +7,13 @@ steps:
     image: node
     commands:
       - npm install
+      - tar czvf backend.tar.gz -X tar-exclude.txt .
   - name: publish
     image: plugins/github-release
     settings:
       api_key:
         from_secret: github_api_key
-      files: backend/producer-server/build/libs/*.jar
+      files: backend.tar.gz
     when:
       event:
       - tag

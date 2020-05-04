@@ -1,0 +1,5 @@
+.*
+Dockerfile*
+docker-compose*
+Jenkinsfile*
+README.md
