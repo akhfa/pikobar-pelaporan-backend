@@ -8,13 +8,13 @@ steps:
     commands:
       - npm install
       - mkdir dist
-      - tar czf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
+      - tar czf /tmp/backend.tar.gz -X tar-exclude.txt $(pwd)
   - name: publish github
     image: plugins/github-release
     settings:
       api_key:
         from_secret: github_api_key
-      files: dist/backend.tar.gz
+      files: /tmp/backend.tar.gz
       checksum:
         - md5
         - sha256
