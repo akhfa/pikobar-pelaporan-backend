@@ -7,13 +7,17 @@ steps:
     image: node
     commands:
       - npm install
-      - tar czvf backend.tar.gz -X tar-exclude.txt $(pwd)
+      - mkdir dist
+      - tar czf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
   - name: publish
     image: plugins/github-release
     settings:
       api_key:
         from_secret: github_api_key
-      files: backend.tar.gz
+      files: dist/backend.tar.gz
+      checksum:
+        - md5
+        - sha256
     when:
       event:
       - tag
