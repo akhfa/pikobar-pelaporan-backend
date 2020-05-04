@@ -8,7 +8,7 @@ steps:
     commands:
       - npm install
       - mkdir dist
-      - tar czvf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
+      - tar czf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
   - name: publish
     image: plugins/github-release
     settings:
