@@ -1,0 +1,25 @@
+kind: pipeline
+type: kubernetes
+name: build-npm
+
+steps:
+  - name: build
+    image: node
+    commands:
+      - npm install
+  - name: publish
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_api_key
+      files: backend/producer-server/build/libs/*.jar
+    when:
+      event:
+      - tag
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+    - tag
