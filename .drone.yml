@@ -7,7 +7,7 @@ steps:
     image: node
     commands:
       - npm install
-      - tar czvf backend.tar.gz -X tar-exclude.txt .
+      - tar czvf backend.tar.gz -X tar-exclude.txt $(pwd)
   - name: publish
     image: plugins/github-release
     settings:
