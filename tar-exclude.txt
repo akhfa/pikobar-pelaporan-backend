@@ -5,6 +5,7 @@
 .gitignore
 .gitlab-ci.yml
 .travis.yml
+backend.tar.gz
 Dockerfile*
 docker-compose*
 Jenkinsfile*
