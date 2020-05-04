@@ -1,0 +1,12 @@
+dist
+.git
+.drone.yml
+.env-example
+.eslintignore
+.gitignore
+.gitlab-ci.yml
+.travis.yml
+Dockerfile*
+docker-compose*
+Jenkinsfile*
+README.md
