@@ -7,7 +7,7 @@ steps:
     image: node
     commands:
       - npm install
-      - npm audit fix
+      - npm audit
   - name: publish
     image: plugins/github-release
     settings:
