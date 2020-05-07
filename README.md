@@ -1,5 +1,4 @@
-[![Build Status](https://drone.akhfa.me/api/badges/akhfa/pikobar-pelaporan-backend/status.svg)](https://drone.akhfa.me/akhfa/pikobar-pelaporan-backend)
-[![Build Status](https://dtes.akhfa.me/api/badges/akhfa/pikobar-pelaporan-backend/status.svg)](https://dtes.akhfa.me/akhfa/pikobar-pelaporan-backend)
+[![Build Status](https://mydrone.akhfa.me/api/badges/akhfa/pikobar-pelaporan-backend/status.svg)](https://mydrone.akhfa.me/akhfa/pikobar-pelaporan-backend)
 
 # API Pikobar Pelaporan Jabar
 API service for Jabar Pikobar application
