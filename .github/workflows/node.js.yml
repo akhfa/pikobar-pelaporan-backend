@@ -28,6 +28,7 @@ jobs:
     - run: mkdir dist
     - run: tar czf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
     - run: ls -lh dist
+    - run: printenv
     - uses: actions/upload-artifact@v2
       with:
         name: backend
