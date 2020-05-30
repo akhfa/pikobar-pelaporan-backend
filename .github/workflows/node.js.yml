@@ -25,3 +25,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: mkdir dist
+    - run: tar czf dist/backend.tar.gz -X tar-exclude.txt $(pwd)
+    - run: ls -lh dist
+    - run: printenv
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.INVOCATION_ID }}-backend
+        path: dist/backend.tar.gz
